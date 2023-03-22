@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="cphairportModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="flightroute">
+          <Key>
+            <PropertyRef Name="flightRouteID" />
+          </Key>
+          <Property Name="flightRouteID" Type="int" Nullable="false" />
+          <Property Name="destination" Type="int" Nullable="false" />
+          <Property Name="departure" Type="int" Nullable="false" />
+          <Property Name="flightCompany" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="planeID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="location">
+          <Key>
+            <PropertyRef Name="locationID" />
+          </Key>
+          <Property Name="locationID" Type="int" Nullable="false" />
+          <Property Name="iata" Type="varchar" MaxLength="50" />
+          <Property Name="country" Type="varchar" MaxLength="50" />
+          <Property Name="nameOfAirport" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="plane">
+          <Key>
+            <PropertyRef Name="planeID" />
+          </Key>
+          <Property Name="planeID" Type="int" Nullable="false" />
+          <Property Name="passengerCapacity" Type="int" Nullable="false" />
+          <Property Name="aproxMinReachInKm" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_flightroute_departure">
+          <End Role="location" Type="Self.location" Multiplicity="1" />
+          <End Role="flightroute" Type="Self.flightroute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="locationID" />
+            </Principal>
+            <Dependent Role="flightroute">
+              <PropertyRef Name="departure" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_flightroute_destination">
+          <End Role="location" Type="Self.location" Multiplicity="1" />
+          <End Role="flightroute" Type="Self.flightroute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="locationID" />
+            </Principal>
+            <Dependent Role="flightroute">
+              <PropertyRef Name="destination" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_flightroute_plane">
+          <End Role="plane" Type="Self.plane" Multiplicity="1" />
+          <End Role="flightroute" Type="Self.flightroute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="plane">
+              <PropertyRef Name="planeID" />
+            </Principal>
+            <Dependent Role="flightroute">
+              <PropertyRef Name="planeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cphairportModelStoreContainer">
+          <EntitySet Name="flightroute" EntityType="Self.flightroute" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="location" EntityType="Self.location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="plane" EntityType="Self.plane" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_flightroute_departure" Association="Self.FK_flightroute_departure">
+            <End Role="location" EntitySet="location" />
+            <End Role="flightroute" EntitySet="flightroute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_flightroute_destination" Association="Self.FK_flightroute_destination">
+            <End Role="location" EntitySet="location" />
+            <End Role="flightroute" EntitySet="flightroute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_flightroute_plane" Association="Self.FK_flightroute_plane">
+            <End Role="plane" EntitySet="plane" />
+            <End Role="flightroute" EntitySet="flightroute" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="cphairportModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="flightroute">
+          <Key>
+            <PropertyRef Name="flightRouteID" />
+          </Key>
+          <Property Name="flightRouteID" Type="Int32" Nullable="false" />
+          <Property Name="destination" Type="Int32" Nullable="false" />
+          <Property Name="departure" Type="Int32" Nullable="false" />
+          <Property Name="flightCompany" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="planeID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="location" Relationship="Self.FK_flightroute_departure" FromRole="flightroute" ToRole="location" />
+          <NavigationProperty Name="location1" Relationship="Self.FK_flightroute_destination" FromRole="flightroute" ToRole="location" />
+          <NavigationProperty Name="plane" Relationship="Self.FK_flightroute_plane" FromRole="flightroute" ToRole="plane" />
+        </EntityType>
+        <EntityType Name="location">
+          <Key>
+            <PropertyRef Name="locationID" />
+          </Key>
+          <Property Name="locationID" Type="Int32" Nullable="false" />
+          <Property Name="iata" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nameOfAirport" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="flightroutes" Relationship="Self.FK_flightroute_departure" FromRole="location" ToRole="flightroute" />
+          <NavigationProperty Name="flightroutes1" Relationship="Self.FK_flightroute_destination" FromRole="location" ToRole="flightroute" />
+        </EntityType>
+        <EntityType Name="plane">
+          <Key>
+            <PropertyRef Name="planeID" />
+          </Key>
+          <Property Name="planeID" Type="Int32" Nullable="false" />
+          <Property Name="passengerCapacity" Type="Int32" Nullable="false" />
+          <Property Name="aproxMinReachInKm" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="flightroutes" Relationship="Self.FK_flightroute_plane" FromRole="plane" ToRole="flightroute" />
+        </EntityType>
+        <Association Name="FK_flightroute_departure">
+          <End Role="location" Type="Self.location" Multiplicity="1" />
+          <End Role="flightroute" Type="Self.flightroute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="locationID" />
+            </Principal>
+            <Dependent Role="flightroute">
+              <PropertyRef Name="departure" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_flightroute_destination">
+          <End Role="location" Type="Self.location" Multiplicity="1" />
+          <End Role="flightroute" Type="Self.flightroute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="locationID" />
+            </Principal>
+            <Dependent Role="flightroute">
+              <PropertyRef Name="destination" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_flightroute_plane">
+          <End Role="plane" Type="Self.plane" Multiplicity="1" />
+          <End Role="flightroute" Type="Self.flightroute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="plane">
+              <PropertyRef Name="planeID" />
+            </Principal>
+            <Dependent Role="flightroute">
+              <PropertyRef Name="planeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cphairportEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="flightroutes" EntityType="Self.flightroute" />
+          <EntitySet Name="locations" EntityType="Self.location" />
+          <EntitySet Name="planes" EntityType="Self.plane" />
+          <AssociationSet Name="FK_flightroute_departure" Association="Self.FK_flightroute_departure">
+            <End Role="location" EntitySet="locations" />
+            <End Role="flightroute" EntitySet="flightroutes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_flightroute_destination" Association="Self.FK_flightroute_destination">
+            <End Role="location" EntitySet="locations" />
+            <End Role="flightroute" EntitySet="flightroutes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_flightroute_plane" Association="Self.FK_flightroute_plane">
+            <End Role="plane" EntitySet="planes" />
+            <End Role="flightroute" EntitySet="flightroutes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="cphairportModelStoreContainer" CdmEntityContainer="cphairportEntities">
+          <EntitySetMapping Name="flightroutes">
+            <EntityTypeMapping TypeName="cphairportModel.flightroute">
+              <MappingFragment StoreEntitySet="flightroute">
+                <ScalarProperty Name="flightRouteID" ColumnName="flightRouteID" />
+                <ScalarProperty Name="destination" ColumnName="destination" />
+                <ScalarProperty Name="departure" ColumnName="departure" />
+                <ScalarProperty Name="flightCompany" ColumnName="flightCompany" />
+                <ScalarProperty Name="planeID" ColumnName="planeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="locations">
+            <EntityTypeMapping TypeName="cphairportModel.location">
+              <MappingFragment StoreEntitySet="location">
+                <ScalarProperty Name="locationID" ColumnName="locationID" />
+                <ScalarProperty Name="iata" ColumnName="iata" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="nameOfAirport" ColumnName="nameOfAirport" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="planes">
+            <EntityTypeMapping TypeName="cphairportModel.plane">
+              <MappingFragment StoreEntitySet="plane">
+                <ScalarProperty Name="planeID" ColumnName="planeID" />
+                <ScalarProperty Name="passengerCapacity" ColumnName="passengerCapacity" />
+                <ScalarProperty Name="aproxMinReachInKm" ColumnName="aproxMinReachInKm" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
